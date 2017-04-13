@@ -12,6 +12,7 @@
 #include <boost/log/sources/logger.hpp>
 #include <boost/log/utility/setup/console.hpp>
 
+#include <iostream>
 namespace lg {
 
 namespace expr = boost::log::expressions;
@@ -38,7 +39,7 @@ public:
 	{
 	}
 
-	void consume(boost::log::record_view const& rec, string_type const& line)
+	void consume(boost::log::record_view const&, string_type const& line)
 	{
 		m_func(line.c_str());
 	}
@@ -111,8 +112,6 @@ std::ostream& operator<<(std::ostream& stream, LogLevel level)
 
 void initializeJustConsole()
 {
-	auto sink = boost::make_shared<SinkType>();
-	sink->set_filter(boost::phoenix::bind(&log_level_filter, severity.or_none()));
 	auto consoleSink = boost::log::add_console_log(std::clog);
 	consoleSink->set_formatter(boost::log::expressions::stream
 							   << "[" << expr::attr<boost::thread::id>("ThreadID") << "]"
@@ -121,6 +120,7 @@ void initializeJustConsole()
 							   << "[" << severity << "] "
 							   << "[" << request_id << "] "
 							   << boost::log::expressions::smessage);
+	consoleSink->set_filter(boost::phoenix::bind(&log_level_filter, severity.or_none()));
 	boost::log::core::get()->add_global_attribute("TimeStamp", boost::log::attributes::local_clock());
 }
 

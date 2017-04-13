@@ -45,11 +45,24 @@ void processBackgroudAnnotationFile(const std::string& filePath, const std::stri
 
 		std::string imagePath;
 		f >> imagePath;
+
+		if (imagePath.empty())
+		{
+			continue;
+		}
+
 		pathExistCheck(imagePath);
 		LOG_INFO << "reading " << imagePath;
 		auto img = cv::imread(imagePath);
 		int cropsCount = 0;
 		f >> cropsCount;
+
+		if (!cropsCount)
+		{
+			LOG_INFO << "skipping " << imagePath << "empty rects";
+			continue;
+		}
+
 		std::vector<cv::Rect> rects;
 		rects.reserve(cropsCount);
 

@@ -2,32 +2,39 @@
 
 #include <opencv2/core.hpp>
 
-#include <opencv2/features2d.hpp>
-
 #include <vector>
+#include <memory>
+
+namespace cv {
+class CascadeClassifier;
+
+}
 
 namespace varoza {
+
+struct CascadeParams
+{
+	CascadeParams();
+	CascadeParams(double scaleFactor,
+				  int minNeighbors,
+				  cv::Size minSize ,
+				  cv::Size maxSize);
+	double scaleFactor = 1.1;
+	int minNeighbors = 5;
+	cv::Size minSize = cv::Size(20, 20);
+	cv::Size maxSize = cv::Size(200, 200);
+};
 
 class VarozaCounter {
 public:
 
-	enum class Features
-	{
-		SIFT,
-		ORB
-	};
-
+	/*! Path to cascade filter model
+	 * \param cascadeFilterModel
+	 */
 	VarozaCounter(
-		Features ftype = Features::SIFT
+		const std::string& cascadeFilterModel,
+		const CascadeParams& params = CascadeParams()
 	);
-
-	virtual void addTrainImg(const cv::Mat& img);
-
-	virtual void trainMatch();
-
-	virtual void loadMatchStorage(const std::string& matchStoragePath);
-
-	virtual void saveMatchStorage(const std::string& matchStoragePath);
 
 	virtual ~VarozaCounter();
 
@@ -35,13 +42,11 @@ public:
 	 * \param img Frame to process
 	 * \return Count of varoza
 	 */
-	virtual int processFrame(const cv::Mat& img, const cv::Mat& original);
+	virtual int processFrame(const cv::Mat& img);
 
 private:
-	cv::Ptr<cv::Feature2D> m_features;
-	cv::Ptr<cv::DescriptorMatcher> m_matcher;
-
-	std::vector<cv::Mat> m_trainDescriptors;
+	std::unique_ptr<cv::CascadeClassifier> m_filter;
+	CascadeParams m_params;
 };
 
 }
