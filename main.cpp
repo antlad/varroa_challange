@@ -1,6 +1,7 @@
 #include "varozacounter.hpp"
 #include "log.hpp"
 #include "common.hpp"
+#include "extract_background.hpp"
 
 #include <boost/program_options.hpp>
 #include <boost/filesystem.hpp>
@@ -58,6 +59,7 @@ int main(int argc, char* argv[])
 
 		if (mode == "extract")
 		{
+			utils::processBackgroudAnnotationFile(inputFileName, extractFolder);
 			return 0;
 		}
 
