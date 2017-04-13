@@ -27,6 +27,8 @@ log.hpp
 log.cpp
 common.hpp
 common.cpp
+extract_background.cpp
+extract_background.hpp
 )
 
 target_link_libraries(${PROJECT_NAME}

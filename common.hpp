@@ -6,7 +6,7 @@
 
 namespace utils {
 
-
+void pathExistCheck(const std::string& path);
 
 class TimerElapsed {
 public:

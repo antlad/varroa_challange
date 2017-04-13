@@ -55,21 +55,19 @@ int main(int argc, char* argv[])
 
 		lg::initializeJustConsole();
 		lg::setLogLevelFromString(logLevel);
-		auto pathExistCheck = [](const std::string & path)
+
+		if (mode == "extract")
 		{
-			if (!bf::exists(path))
-			{
-				const auto& msg = (boost::format("File path %s doesn't exsists") % path).str();
-				BOOST_THROW_EXCEPTION(std::runtime_error(msg));
-			}
-		};
+			return 0;
+		}
+
 		varoza::VarozaCounter counter;
 
 		if (!originalFolder.empty())
 		{
-			pathExistCheck(originalFolder);
+			utils::pathExistCheck(originalFolder);
 
-			for (const auto& f : listOfFiles(originalFolder))
+			for (const auto& f : utils::listOfFiles(originalFolder))
 			{
 				LOG_TRACE << "reading file: " << f;
 				auto img = cv::imread(f);

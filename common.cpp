@@ -1,6 +1,8 @@
 #include "common.hpp"
 
 #include <boost/filesystem.hpp>
+#include <boost/format.hpp>
+#include <boost/throw_exception.hpp>
 
 namespace utils {
 
@@ -17,7 +19,7 @@ std::size_t TimerElapsed::elapsedMiliseconds() const
 	return (size_t) std::chrono::duration_cast<std::chrono::milliseconds>(current - m_start).count();
 }
 
-std::vector<std::__cxx11::string> listOfFiles(const std::__cxx11::string& folder)
+std::vector<std::string> listOfFiles(const std::string& folder)
 {
 	std::vector<std::string> files;
 	bf::path p(folder);
@@ -32,6 +34,15 @@ std::vector<std::__cxx11::string> listOfFiles(const std::__cxx11::string& folder
 	}
 
 	return files;
+}
+
+void pathExistCheck(const std::string& path)
+{
+	if (!bf::exists(path))
+	{
+		const auto& msg = (boost::format("File path %s doesn't exsists") % path).str();
+		BOOST_THROW_EXCEPTION(std::runtime_error(msg));
+	}
 }
 
 }
