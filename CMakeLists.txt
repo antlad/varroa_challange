@@ -5,7 +5,7 @@ project(vazora_challange)
 add_definitions(-DBOOST_LOG_DYN_LINK=1)
 
 find_package(OpenCV 3.1 REQUIRED)
-find_package(Boost REQUIRED COMPONENTS filesystem system program_options thread log log_setup)
+find_package(Boost REQUIRED COMPONENTS filesystem system program_options thread log log_setup date_time)
 
 option(ENABLE_VISUAL_DEBUG "Enable visaul debuging mode " OFF)
 
@@ -25,6 +25,8 @@ varozacounter.cpp
 varozacounter.hpp
 log.hpp
 log.cpp
+common.hpp
+common.cpp
 )
 
 target_link_libraries(${PROJECT_NAME}
